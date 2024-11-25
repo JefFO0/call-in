@@ -6,14 +6,17 @@
   "name": "call-in",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "serve": "node server.js"
+    "serve": "node server.js",
+    "dev" : "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "JefFO",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
 }

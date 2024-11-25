@@ -3,8 +3,7 @@ const app = express();
 const patientsRouter = express.Router();
 const bodyParser = require("body-parser");
 
-
-let listOfPatients = ["Kwame", "Bougie"]; // CALL FROM DB
+let listOfPatients = ["Kwame", "Bougie", "Abaabawa", "Djonboi"]; // CALL FROM DB
 
 app.use("/patients", patientsRouter);
 app.use(bodyParser.json());
@@ -33,9 +32,8 @@ patientsRouter.get("/:id", (req, res, next) => {
 });
 
 // CREATE NEW PATIENT
-// patientsRouter.post("/createPatient", (req, res, next) => {
+// patientsRouter.post("/newpatient", (req, res, next) => {
 //   const update = req.query;
-//   const correct = createElement(animals, update);
 //   if (correct) {
 //     animals.push(correct);
 //     res.status(201).send(correct);
@@ -43,9 +41,19 @@ patientsRouter.get("/:id", (req, res, next) => {
 //     res.status(400).send("Error creating new post");
 //   }
 // });
+
 // UPDATE PATIENT PROFILE
+patientsRouter.put("/:id", (req, res, next) => {
+  const patientUpdate = req.query;
+  listOfPatients[req.patient] = patientUpdate;
+  res.send(listOfPatients[req.patient]);
+});
 
 // DELETE PATIENT PROFILE
+patientsRouter.delete("/:id", (req, res, next) => {
+  listOfPatients.splice(req.patient);
+  res.status(204).send();
+});
 
 // ERROR HANDLER
 const errorHandler = (err, req, res, next) => {
@@ -56,3 +64,5 @@ const errorHandler = (err, req, res, next) => {
   res.status(errorStatus).send(err.message);
 };
 app.use(errorHandler);
+
+module.exports = {};
