@@ -3,14 +3,15 @@ const app = express();
 const patientsRouter = express.Router();
 const bodyParser = require("body-parser");
 
-let listOfPatients = ["Kwame", "Bougie", "Abaabawa", "Djonboi"]; // CALL FROM DB
+let listOfPatients = ["Kwame", "Bougie", "Abaabawa", "Djonboi"]; // CALL TO DB
 
 app.use("/patients", patientsRouter);
 app.use(bodyParser.json());
-patientsRouter.param("id", (req, res, next, id) => {
+
+patientsRouter.param("id", (req, res, next, name) => {
   try {
-    if (listOfPatients[id]) {
-      req.patient = listOfPatients[id];
+    if (listOfPatients[name]) {
+      req.patient = listOfPatients[name];
       res.status(200).send(req.patient);
       next();
     } else {
@@ -32,27 +33,31 @@ patientsRouter.get("/:id", (req, res, next) => {
 });
 
 // CREATE NEW PATIENT
-// patientsRouter.post("/newpatient", (req, res, next) => {
-//   const update = req.query;
-//   if (correct) {
-//     animals.push(correct);
-//     res.status(201).send(correct);
-//   } else {
-//     res.status(400).send("Error creating new post");
-//   }
-// });
+patientsRouter.post("/newpatient", (req, res, next) => {
+  const create = req.query.name;
+  if (create !== undefined) {
+    listOfPatients.push(create);
+    res.status(201).send(create);
+  } else {
+    res.status(400).send("Error creating new patient");
+  }
+});
 
 // UPDATE PATIENT PROFILE
 patientsRouter.put("/:id", (req, res, next) => {
-  const patientUpdate = req.query;
-  listOfPatients[req.patient] = patientUpdate;
-  res.send(listOfPatients[req.patient]);
+  const patientUpdate = req.query.name;
+  if (patientUpdate !== undefined) {
+    listOfPatients[req.patient] = patientUpdate;
+    res.status(201).send(listOfPatients[req.patient]);
+  } else {
+    res.status(400).send("Error updating patient record");
+  }
 });
 
 // DELETE PATIENT PROFILE
 patientsRouter.delete("/:id", (req, res, next) => {
-  listOfPatients.splice(req.patient);
-  res.status(204).send();
+  listOfPatients.splice(req.patient, 1);
+  res.status(204).send("Patient deleted");
 });
 
 // ERROR HANDLER
@@ -65,4 +70,4 @@ const errorHandler = (err, req, res, next) => {
 };
 app.use(errorHandler);
 
-module.exports = {};
+module.exports = patientsRouter;
